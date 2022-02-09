@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Powershell Scripts</title>
 </head>
 <body>
     <nav id="navbar">
-      <header> Helpful Powershell Scripts</header>
+      <header> Powershell Scripts</header>
         <ul>
           <li>
             <a class="nav-link" href="#Introduction">Introduction</a>
@@ -41,11 +42,11 @@
             <a class="nav-link" href="#Security_related">Security related</a>
           </li>
         </ul>
-        </nav>
+    </nav>
     <main id="main-doc">
         <section id="Introduction" class="main-section">
             <header>Introduction</header>
-            <p> Below you will find some powershell scripts that i have developed. These scripts were very helpful to me during my 6 years of experience in the IT field. </p>
+            <p> Below you will find some powershell scripts that i have developed. These scripts were very helpful to me during my 6 years as an IT profesional. </p>
         </section>
         <section id="What_you_need_to_know" class="main-section">
             <header>What you need to know</header>
@@ -53,35 +54,101 @@
         </section>
         <section id="Helpful_microsoft_docs" class="main-section">
             <header>Helpful microsoft docs </header>
-            <p> lorin ipsum dollar health kdjfinbe </p>
+            <p> Below you will find links to some helpful Microsoft Docs. </p>
+            <ul>
+              <li> 
+                <a href="https://docs.microsoft.com/en-us/microsoft-365/enterprise/why-you-need-to-use-microsoft-365-powershell?view=o365-worldwide" data-linktype="relative-path"><strong>Why you need to use                         PowerShell for Microsoft 365</strong></a> 
+              </li>
+              <li> 
+                <a href="https://docs.microsoft.com/en-us/microsoft-365/enterprise/connect-to-microsoft-365-powershell?view=o365-worldwide" data-linktype="relative-path"><strong>Connect to Microsoft 365 with                         PowerShell</strong></a> 
+              </li>
+            <li> 
+              <a href="https://docs.microsoft.com/en-us/microsoft-365/enterprise/connect-to-all-microsoft-365-services-in-a-single-windows-powershell-window?view=o365-worldwide" data-linktype="relative-path">                    <strong>Connect to all Microsoft 365 services in a single PowerShell window</strong></a> 
+              </li>
+            <li> 
+              <a href="https://docs.microsoft.com/en-us/microsoft-365/enterprise/cmdlet-references-for-microsoft-365-services?view=o365-worldwide" data-linktype="relative-path"><strong>Cmdlet references for                       Microsoft 365 services</strong></a> 
+            </li>
+            <li><a href="https://docs.microsoft.com/en-us/microsoft-365/enterprise/microsoft-365-powershell-community-resources?view=o365-worldwide" data-linktype="relative-path"><strong>Microsoft 365 community                      resources for PowerShell</strong></a> 
+            </li>
+          </ul>
         </section>
         <section id="Active_directory" class="main-section">
-            <header>Active directory</header>
-            <p> lorin ipsum dollar health kdjfinbe </p>
+          <header>Active directory</header>
+          <p> The script below will identify the names' and emails' of all members of a particular Active directory group. It will then export the data as a csv file to the C$ temp folder. In this example, we can see that the the Active Directory group is called "all-company." </p>
+          <code>Get-ADGroupMember -Identity all-company -Recursive | Get-ADUser -Properties mail | select-object name,mail | export-csv -Path C:\temp\allcompanylist.csv -NoTypeInformation</code>
         </section>
         <section id="Hybrid_active_directory" class="main-section">
-            <header>Hybrid active directory</header>
-            <p> lorin ipsum dollar health kdjfinbe </p>
+          <header>Hybrid active directory</header>
+          <p> For this script, we first need to improt the csv file located below the code block. After it has been imported we can then pipe (|) it to the rest of the code below. In this example we are taking a csv file and then adding the Active Directory groups listed in the csv "group" column to the csv "members" column. This will add the the multiple groups to the multiple users in one go. </p>
+          <code>import-csv "c:\scripts\defaultgroups.csv" | foreach-object { add-adgroupmember -identity $_."group" -members $_."members" }</code>
+          <table>
+            <tr>
+              <th>Group</th>
+              <th>Members</th>
+            </tr>
+            <tr>
+              <td>all-company</td>
+              <td>NorrisC</td>
+            </tr>
+            <tr>
+              <td>all-company</td>
+              <td>LeeB</td>
+              </tr>
+            <tr>
+              <td>Vpn</td>
+              <td>NorrisC</td>
+            </tr>
+            <tr>
+              <td>Vpn</td>
+              <td>LeeB</td>
+            </tr>
+            <tr>
+              <td>Marketing</td>
+              <td>NorrisC</td>
+            </tr>
+            <tr>
+              <td>Finance</td>
+              <td>LeeB</td>
+            </tr>
+          </table>
         </section>
         <section id="Office365" class="main-section">
             <header>Office365</header>
-            <p> lorin ipsum dollar health kdjfinbe </p>
+            <p> # Adding folder permisions for calendarsync@karate.com to a users calendar
+            <p>Step 1: Connect powershell to Exchange Online doc can be found under "helpful microsoft docs" above.</p>
+            <p>Step 2: check on users calendar permissions </p>
+            <code>Get-MailboxFolderPermission -identity norrisc@karate.com:\calendar</code>
+            <p>Step 3: Run below PS to add permissions </p>
+            <code>Add-MailboxFolderPermission -Identity bootha@karate.com:\calendar -User calendarsymnc@karate.com -AccessRights Editor</code>
+            <p> Step 4: Run Step 2 PS again to make sure the permisiions have been added <p>
+            <p>NOTE Chuck Norris (norrisc) is the example user in this script, and calendarsync@karate.com is the other example user/group we are adding to norrisc@karate.com. Please change the norrisc@karate.com to the target users email address and also calendarsync@karate.com to the desired user/group. </p>
         </section>
         <section id="IP_phones" class="main-section">
             <header>IP Phones</header>
-            <p> lorin ipsum dollar health kdjfinbe </p>
+            <p> This script will give you the displayname and ipphone number field of all active directory users on the domain.  </p>
+            <p> After the script populates the data it will then export it as a csv file to the selected path. </p>
+            <code>get-aduser -Filter * -properties displayname, ipphone | select-object displayname, ipphone | export-csv C:\Temp\file1.csv</code>
         </section>
         <section id="Printers" class="main-section">
             <header>Printers</header>
-            <p> lorin ipsum dollar health kdjfinbe </p>
+            <p>This script will give you the printerstatus, jobcount, and location of all printers located on the specific print server.  </p>
+            <code>get-printer -computername hornet | Select-Object name, PrinterStatus, JobCount, Location | Sort-Object -unique name | Sort-Object location </code>
         </section>
         <section id="Servers" class="main-section">
             <header>Servers</header>
-            <p> lorin ipsum dollar health kdjfinbe </p>
+            <p> This script will give you the disk space for all the domain controllers on your domain. </p>
+            <code>Get-ADComputer -Filter * -SearchBase 'OU=domain controllers,dc=karate,dc=com' -properties * | ForEach-Object { Get-WmiObject -class Win32_LogicalDisk –computername $_.'dnshostname' -filter                           "drivetype=3" | Sort-object -property pscomputername, deviceid | Format-Table -property pscomputername, DeviceID, @{label='FreeSpace(MB)';expression={$_.FreeSpace / 1MB -as [int]}},                                 @{label='Size(GB)';expression={$_.Size / 1GB -as [int]}}, @{label='%Free';expression={$_.FreeSpace / $_.Size * 100 -as [int]}} } </code>
         </section>
         <section id="Security_related" class="main-section">
             <header>Security related</header>
-            <p> lorin ipsum dollar health kdjfinbe </p>
+            <p> This Script will give you the expiration date of all active directory accounts on your domain, and then export the data as a csv file to the C$ temp folder. </p>
+            <code>Get-ADUser -filter * -Properties AccountExpirationDate | Select-object sAMAccountName, AccountExpirationDate | export-csv C:\temp\AccountExpirationDate.csv </code>
+            <p> This Script will give you the last login date of all computers on your domain, and then export the data as a csv file to the C$ temp folder. </p>
+            <code>Get-ADcomputer -Filter * -Properties  displayname, "lastlogondate" | sort-object -property lastlogondate -descending | export-csv C:\temp\comp.csv </code>
+            <p>This Script will give you the last login date of all users on your domain, and then export the data as a csv file to the C$ temp folder.  </p>
+            <code> Get-ADUser -Filter * -Properties  displayname, "lastlogondate" | sort-object -property lastlogondate -descending | export-csv C:\temp\file8.csv</code>
+            <p> This Script will give you the last time Chuck Norrs (norrisc) reset his password, and also the expiration date of their current password. </p>
+            <code> get-aduser -Identity norrisc -properties passwordlastset, passwordexpired | select-object passwordlastset, passwordexpired</code>
         </section>
     </main>      
 </body>
